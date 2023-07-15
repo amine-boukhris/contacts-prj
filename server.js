@@ -1,7 +1,17 @@
 const express = require("express");
+const connectDb = require("./config/dbConnection");
+const errorHandler = require("./middleware/errorHandler");
+const dotenv = require("dotenv").config();
 
-const app = express()
+connectDb();
+const app = express();
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
-console.log("hello from server");
+app.use(express.json());
+app.use("/api/contacts", require("./routes/contactRouters"));
+app.use(errorHandler);
+
+app.listen(port, () => {
+    console.log(`server running on port ${port}`);
+});
