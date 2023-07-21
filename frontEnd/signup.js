@@ -23,13 +23,16 @@ form.addEventListener("submit", async (e) => {
     };
 
     try {
-        const response = await fetch("http://localhost:5001/api/users/register", {
-            method: "POST",
-            body: JSON.stringify(jsonObj),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+        const response = await fetch(
+            "http://localhost:5001/api/users/register",
+            {
+                method: "POST",
+                body: JSON.stringify(jsonObj),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
 
         if (!response.ok) {
             throw new Error("Network response was not ok.");
@@ -37,6 +40,7 @@ form.addEventListener("submit", async (e) => {
 
         const data = await response.json();
         console.log(JSON.stringify(data));
+        window.location.href = "http://127.0.0.1:5500/frontEnd/login.html";
     } catch (error) {
         console.error("Error:", error.message);
     }
