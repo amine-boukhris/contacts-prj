@@ -9,6 +9,17 @@ contactsItems.forEach((contactItem) => {
 
     const token = localStorage.getItem("token");
 
+    callBtn.addEventListener("click", async () => {
+        await fetch("http://localhost:5001/api/contacts/", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => console.log(data));
+    });
+
     deleteBtn.addEventListener("click", async () => {
         try {
             const name = contactItem.querySelector("#contact-name");
@@ -16,7 +27,7 @@ contactsItems.forEach((contactItem) => {
             const response = await fetch(`http://localhost:5001/api/contacts/${id}`, {
                 method: "DELETE",
                 headers: {
-                    Bearer: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJuYW1lIjoiZHVja3liYWthIiwiZW1haWwiOiJkdWNrQG1haWwuY29tIiwiaWQiOiI2NGJhNjBkNmJmYmI2YWY5ZTk4Zjk2NzMifSwiaWF0IjoxNjg5OTU2MDQ3LCJleHAiOjE2ODk5NTY5NDd9.Ejav0mb7B1xCjWRP-RUPyqpGWeQPehUB0Q5JI4ztr7o",
+                    Authorization: `Bearer ${token}`,
                 },
             });
 

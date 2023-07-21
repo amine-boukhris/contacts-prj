@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const { ObjectId } = require("mongodb");
 const Contact = require("../models/contactModel");
 //@desc Get all contacts
 //@route GET /api/contacts
