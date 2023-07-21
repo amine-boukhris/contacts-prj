@@ -18,16 +18,18 @@
             referrerpolicy="no-referrer"
         ></script>
         <link rel="stylesheet" href="style.css" />
-        <title>Signup Page</title>
+        <title>My Contacts</title>
     </head>
     <body>
         <div class="container">
             <h1 class="my-5">My Contacts</h1>
+            <button class="btn btn-primary my-3" id="get-all">Get all Contacts</button>
             <ol class="list-group list-group-numbered" id="contacts-list">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="ms-2 me-auto">
                         <div class="fw-bold" data-id="64bab0824c57c2fe116009c1" id="contact-name">Matio the him</div>
-                        32 403 817
+                        <div id="contact-number">32 403 817</div>
+                        <div id="contact-email">mario@mail.com</div>
                     </div>
                     <button id="call" type="button" class="btn btn-primary mx-2 px-4">Call Contact</button>
                     <button id="send-email" type="button" class="btn btn-outline-primary mx-2">Send email</button>
