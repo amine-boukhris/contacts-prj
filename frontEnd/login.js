@@ -31,6 +31,14 @@ form.addEventListener("submit", async (e) => {
 
         const data = await response.json();
         localStorage.setItem("token", data.accessToken)
+        await fetch("http://localhost:5001/api/users/current", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            })
+                .then((response) => response.json())
+                .then((response) => localStorage.setItem("currentUserId", response.id));
         window.location.href = "http://127.0.0.1:5500/frontEnd/page.html";
     } catch (error) {
         console.error("Error:", error.message);
