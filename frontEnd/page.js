@@ -1,41 +1,16 @@
-let contactsList = document.getElementById("contacts-list");
+let contactsList = document.querySelector("#contacts-list");
 let contactsItems = contactsList.querySelectorAll("li");
 const getAllBtn = document.getElementById("get-all");
 const addContactBtn = document.getElementById("add-contact");
+const logOutBtn = document.getElementById("log-out");
 
-addContactBtn.addEventListener("click", async () => {
-    const name = DOMPurify.sanitize(document.getElementById("add-name-input").value);
-    const email = DOMPurify.sanitize(document.getElementById("add-email-input").value);
-    const number = DOMPurify.sanitize(document.getElementById("add-number-input").value);
+logOutBtn.addEventListener('click', () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("currentUserId");
+    window.location.href = "http://127.0.0.1:5500/frontEnd/login.html";
+})
 
-    if (validator.isEmpty(name) || validator.isEmpty(email) || validator.isEmpty(number)) {
-        throw new Error("All fields are required");
-    }
-    if (!validator.isEmail(email)) {
-        throw new Error("Email format is incorrect");
-    }
-
-    const jsonObj = {
-        name: name,
-        email: email,
-        phone: number,
-    };
-
-    await fetch("http://localhost:5001/api/contacts/", {
-        method: "POST",
-        body: JSON.stringify(jsonObj),
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-        },
-    })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data);
-        });
-});
-
-getAllBtn.addEventListener("click", async () => {
+const getAllFunction = async () => {
     contactsList.innerHTML = "";
     await fetch("http://localhost:5001/api/contacts/", {
         method: "GET",
@@ -54,7 +29,7 @@ getAllBtn.addEventListener("click", async () => {
                     <div id="contact-number">${contact.phone}</div>
                     <div id="contact-email">${contact.email}</div>
                 </div>
-                <button id="call" type="button" class="btn btn-primary mx-2 px-4">Call Contact</button>
+                <button disabled id="call" type="button" class="btn btn-primary mx-2 px-4">Call Contact</button>
                 <button id="send-email" type="button" class="btn btn-outline-primary mx-2">Send email</button>
                 <button id="edit" type="button" class="btn btn-outline-warning mx-2">Edit</button>
                 <button id="delete" type="button" class="btn btn-outline-danger mx-2">Delete</button>
@@ -62,7 +37,7 @@ getAllBtn.addEventListener("click", async () => {
                 contactsList.appendChild(contactListItem);
             });
         });
-    contactsList = document.getElementById("contacts-list");
+    contactsList = document.querySelector("#contacts-list");
     contactsItems = contactsList.querySelectorAll("li");
     contactsItems.forEach((contactItem) => {
         const callBtn = contactItem.querySelector("#call"); // won't add functionality at this level
@@ -71,6 +46,11 @@ getAllBtn.addEventListener("click", async () => {
         const deleteBtn = contactItem.querySelector("#delete");
 
         const token = localStorage.getItem("token");
+
+
+        sendEmailBtn.addEventListener("click", () => {
+            window.location.href = `mailto:${contactItem.querySelector("#contact-email").innerHTML}`
+        })
 
         editBtn.addEventListener("click", () => {
             const editSection = document.createElement("div");
@@ -139,9 +119,10 @@ getAllBtn.addEventListener("click", async () => {
                     .then((data) => {
                         console.log(data);
                         // change current list item from data info
-                        contactItem.querySelector("#contact-name").innerHTML = data.name
-                        contactItem.querySelector("#contact-email").innerHTML = data.email
-                        contactItem.querySelector("#contact-number").innerHTML = data.email
+                        contactItem.querySelector("#contact-name").innerHTML = data.name;
+                        contactItem.querySelector("#contact-email").innerHTML = data.email;
+                        contactItem.querySelector("#contact-number").innerHTML = data.phone;
+                        editSection.remove();
                     });
             });
             cancelBtn.addEventListener("click", () => {
@@ -175,4 +156,48 @@ getAllBtn.addEventListener("click", async () => {
             }
         });
     });
+};
+
+addContactBtn.addEventListener("click", async () => {
+    const name = DOMPurify.sanitize(document.getElementById("add-name-input").value);
+    const email = DOMPurify.sanitize(document.getElementById("add-email-input").value);
+    const number = DOMPurify.sanitize(document.getElementById("add-number-input").value);
+
+    if (validator.isEmpty(name) || validator.isEmpty(email) || validator.isEmpty(number)) {
+        throw new Error("All fields are required");
+    }
+    if (!validator.isEmail(email)) {
+        throw new Error("Email format is incorrect");
+    }
+
+    const jsonObj = {
+        name: name,
+        email: email,
+        phone: number,
+    };
+
+    await fetch("http://localhost:5001/api/contacts/", {
+        method: "POST",
+        body: JSON.stringify(jsonObj),
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            document.getElementById("add-name-input").value = "";
+            document.getElementById("add-email-input").value = "";
+            document.getElementById("add-number-input").value = "";
+            location.reload();
+        });
 });
+
+window.addEventListener("load", () => {
+    if (!localStorage.getItem('token') || !localStorage.getItem('currentUserId')) {
+        window.location.href = "http://127.0.0.1:5500/frontEnd/login.html";
+    }
+    getAllFunction();
+});
+
+getAllBtn.addEventListener("click", getAllFunction);
