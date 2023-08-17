@@ -7,7 +7,7 @@ const logOutBtn = document.getElementById("log-out");
 logOutBtn.addEventListener('click', () => {
     localStorage.removeItem("token");
     localStorage.removeItem("currentUserId");
-    window.location.href = "http://127.0.0.1:5500/frontEnd/login.html";
+    window.location.href = window.location.origin + "/frontEnd/login.html";
 })
 
 const getAllFunction = async () => {
@@ -195,7 +195,7 @@ addContactBtn.addEventListener("click", async () => {
 
 window.addEventListener("load", () => {
     if (!localStorage.getItem('token') || !localStorage.getItem('currentUserId')) {
-        window.location.href = "http://127.0.0.1:5500/frontEnd/login.html";
+        window.location.href = window.location.origin + "/frontEnd/login.html";
     }
     getAllFunction();
 });

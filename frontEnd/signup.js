@@ -40,7 +40,7 @@ form.addEventListener("submit", async (e) => {
 
         const data = await response.json();
         console.log(JSON.stringify(data));
-        window.location.href = "http://127.0.0.1:5500/frontEnd/login.html";
+        window.location.href = window.location.origin + "/frontEnd/login.html";
     } catch (error) {
         console.error("Error:", error.message);
     }

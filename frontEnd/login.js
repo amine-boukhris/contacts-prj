@@ -39,7 +39,7 @@ form.addEventListener("submit", async (e) => {
             })
                 .then((response) => response.json())
                 .then((response) => localStorage.setItem("currentUserId", response.id));
-        window.location.href = "http://127.0.0.1:5500/frontEnd/page.html";
+                window.location.href = window.location.origin + "/frontEnd/page.html";
     } catch (error) {
         console.error("Error:", error.message);
     }
